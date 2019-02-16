@@ -1,0 +1,19 @@
+
+% time: ((( start )))
+\noindent((% if type == 'Workshop' -%))
+((% if last_timeslot != start %))\newSmallTimeslot{((( start )))}((% endif %))
+\workshop{((( title|e )))}{((( speakers|e )))}{((( room|e )))}
+\workshopspace((% else -%))%
+((% if last_timeslot != start %))\newTimeslot{((( start )))}((% endif %))
+((( command ))){%
+  ((( speakers|e )))%
+}{%
+  ((( title|e )))%
+}{%
+}{%
+  ((( abstract|e )))%
+}
+((% endif %))
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
