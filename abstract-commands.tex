@@ -85,7 +85,7 @@ height=169mm, contents={%
 
 % \setpagebackground selects the page style to be used depending on the current day. Each day has
 % its own page style.
-\newcommand{\setpagebackground}{ %
+\newcommand{\setPageBackground}{ %
   \ifthenelse{\equal{\conferenceDay}{\mittwoch}}{%
     \pagestyle{mittwoch}
   }{}
@@ -115,20 +115,19 @@ height=169mm, contents={%
   % 5. colour
   % 6. room
   %\thispagestyle{scrheadings}
-  \setpagebackground
+  \setPageBackground
   \setlength\tabcolsep{0pt}
   % \setlength{\fboxsep}{0pt}
   \noindent\fcolorbox{white}{#5}{%
-    \parbox{%
-      \titleboxwidth}{%
+    \parbox{\titleboxwidth}{%
       \noindent\begin{tabu}{X[5L]r}
-        \isspeakerempty{#1}{#2}{#6}
-        \issubtitleempty{#3}
+        \isSpeakerEmpty{#1}{#2}{#6}
+        \isSubtitleEmpty{#3}
       \end{tabu}%
     }%
   }%
   %
-  \isabstractempty{#4}%
+  \isAbstractEmpty{#4}%
   \vspace{0.5em}% space to the next talk even if there is no abstract
   \setlength\tabcolsep{6pt} % set column padding back to default value
 }
@@ -136,7 +135,7 @@ height=169mm, contents={%
 % lay out the speaker if there is any
 % We assume that there is only a subtitle if the talk has a speaker.
 \makeatletter
-  \newcommand{\isspeakerempty}[3]{%
+  \newcommand{\isSpeakerEmpty}[3]{%
     % Arguments:
     % 1. speaker
     % 2. title
@@ -144,13 +143,13 @@ height=169mm, contents={%
     \@ifmtarg{#1}{%
       \par\noindent\large \sectfont #2% % titel
       &
-      #3, \talktime
+      #3, \talkTime
       \tabularnewline
     }%
     {
       \emph{#1} % Sprecher
       &
-      \talktime
+      \talkTime
       \tabularnewline
       {%
         \par\noindent\large \sectfont #2%
@@ -165,7 +164,7 @@ height=169mm, contents={%
 % Lay out the subtitle
 % has to be a separate function and has to be surrounded by \makeatletter for technical reasons
 \makeatletter
-  \newcommand{\issubtitleempty}[1]{%
+  \newcommand{\isSubtitleEmpty}[1]{%
     \@ifnotmtarg{#1}{%
       \multicolumn{2}{Y{\linewidth}}{%
         \vspace{-0.6em}%
@@ -182,7 +181,7 @@ height=169mm, contents={%
 % Lay out the abstract if there is any
 % has to be a separate function and has to be surrounded by \makeatletter for technical reasons
 \makeatletter
-\newcommand{\isabstractempty}[1]{%
+\newcommand{\isAbstractEmpty}[1]{%
   \ifstrempty{#1}{%
     \vspace{1.5em}%
   }{%
@@ -207,37 +206,37 @@ height=169mm, contents={%
 % abstract at Audimax (S239)
 \newcommand{\abstractAudimax}[4]%
 {%
-  \setabstract{#1}{#2}{#3}{#4}{audimax}{Audimax}
+  \setAbstract{#1}{#2}{#3}{#4}{audimax}{Audimax}
 }
 
 % abstract at Mathe (Z211) 
 \newcommand{\abstractMathe}[4]%
 {%
-  \setabstract{#1}{#2}{#3}{#4}{hellgelb}{Mathe}
+  \setAbstract{#1}{#2}{#3}{#4}{hellgelb}{Mathe}
 }
 
 % abstract at Physik (Z254)
 \newcommand{\abstractPhysik}[4]%
 {%
-  \setabstract{#1}{#2}{#3}{#4}{hellgruen}{Physik}
+  \setAbstract{#1}{#2}{#3}{#4}{hellgruen}{Physik}
 }
 
 % event at Bärenzwinger
 \newcommand{\abstractBaerenzwinger}[4]%
 {%
-  \setabstract{#1}{#2}{#3}{#4}{dezentrot}{Bärenzwinger}
+  \setAbstract{#1}{#2}{#3}{#4}{dezentrot}{Bärenzwinger}
 }
 
 % abstract at Recht (Z208)
 \newcommand{\abstractRecht}[4]%
 {%
-  \setabstract{#1}{#2}{#3}{#4}{geoblau}{Recht}
+  \setAbstract{#1}{#2}{#3}{#4}{geoblau}{Recht}
 }
 
 % abstract at a different location
 \newcommand{\abstractOther}[5]%
 {%
-  \setabstract{#1}{#2}{#3}{#4}{hellorange}{#5}
+  \setAbstract{#1}{#2}{#3}{#4}{hellorange}{#5}
 }
 
 % infobox for workshops (they don't have an abstract in the booklet)
@@ -252,7 +251,7 @@ height=169mm, contents={%
       \begin{tabu}{X[5L]r}
         \emph{#2} % Sprecher
         &
-        \talktime
+        \talkTime
         \tabularnewline
         {\noindent\large \bfseries #1}% % title
         &
