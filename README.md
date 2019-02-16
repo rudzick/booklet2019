@@ -13,7 +13,9 @@ pdflatex master.tex
 
 ## Contributing
 
-The booklet has to be sumitted to the print shop on 25 February 2019. If you have any questions, don't heshitate to ask the maintainer via IRC (Nakaner on irc.oftc.net)
+This repository is for a booklet of a German conference. Therefore, the language of the issue tracke is German.
+
+Das Programmheft muss am 25. Februar 2019 im Druck sein. Falls Du mithelfen möchtest und Fragen hast, ist es am Besten, Nakaner via IRC (bei OFTC) zu kontaktieren. Die Liste der zu erledigenden Tätigkeiten findest du im Issue-Tracker. Bitte lies dir [CONTRIBUTING.md](CONTRIBUTING.md) durch.
 
 ## License
 
