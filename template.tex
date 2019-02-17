@@ -3,10 +3,10 @@
 % URL: https://pretalx.com/fossgis2019/talk/((( slug )))/
 
 \noindent((% if type == 'Workshop' -%))
-((% if last_timeslot != date %))\newSmallTimeslot{((( date )))}((% endif %))
+((% if last_timeslot != date %))\newSmallTimeslot{((( date|datetimeformat )))}((% endif %))
 \workshop{((( title|e )))}{((( speakers|e )))}{((( room|e )))}
 \workshopspace((% else -%))%
-((% if last_timeslot != date %))\newTimeslot{((( date )))}((% endif %))
+((% if last_timeslot != date %))\newTimeslot{((( date|datetimeformat )))}((% endif %))
 ((( command ))){%
   ((( speakers|e )))%
 }{%
