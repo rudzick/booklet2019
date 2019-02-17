@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 
 import argparse
+import datetime
 import html
 import jinja2
 import json
@@ -47,6 +48,10 @@ commands = {
         },
 }
 default_cmd = {"name": "???", "command": "\\abstractOther"}
+DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
+
+def datetimeformat(value, format="%H:%M"):
+    return value.strftime(format)
 
 def escape_latex(source):
     result = source
@@ -86,12 +91,22 @@ for day in schedule["conference"]["days"]:
             for person in talk["persons"]:
                 speakers.append(person["public_name"])
             speakers = ", ".join(speakers)
-            #speakers = ", ".join([s["public_name"] for s in talk["persons"]])
             abstract = html.unescape(talk["abstract"])
-            talks.append({"start": talk["start"], "title": talk["title"], "room": talk["room"], "abstract": abstract, "speakers": speakers, "slug": talk["slug"], "type": talk["type"]})
+            # remove colon from timezone
+#            if talk["date"][-3] == ":":
+#                talk["date"] = talk["date"][:-3] + talk["date"][-2:]
+            talks.append({
+                "date": datetime.datetime.strptime(talk["date"], DATE_FORMAT),
+                "title": talk["title"],
+                "room": talk["room"],
+                "abstract": abstract,
+                "speakers": speakers,
+                "slug": talk["slug"],
+                "type": talk["type"]
+            })
 
 # sort talks by start, then by room
-talks.sort(key=lambda t : (t["start"], t["room"]))
+talks.sort(key=lambda t : (t["date"], t["room"]))
 
 # load template
 template_dir = os.path.abspath(os.path.dirname(args.template))
@@ -105,7 +120,8 @@ jinja2_env = jinja2.Environment(
     comment_end_string='#))',
     undefined=jinja2.StrictUndefined
 )
-jinja2_env.filters['e'] = escape_latex
+jinja2_env.filters["e"] = escape_latex
+jinja2_env.filters["datetimeformat"] = datetimeformat
 template = jinja2_env.get_template(os.path.basename(args.template))
 
 # render talks as LaTeX and write to file
@@ -113,4 +129,4 @@ last_timeslot = ""
 for t in talks:
     out = talk2tex(template, t, last_timeslot)
     sys.stdout.write(out)
-    last_timeslot = t["start"]
+    last_timeslot = t["date"]
