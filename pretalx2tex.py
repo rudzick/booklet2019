@@ -12,6 +12,7 @@ import textwrap
 
 
 latex_substitutions = [
+    (re.compile("([a-z])\*(innen|r|n)"), "\\1(\\2)"),
     (re.compile("„"), "\""),
     (re.compile("“"), "\""),
     (re.compile(r'\\'), r'\\textbackslash'),
@@ -21,7 +22,8 @@ latex_substitutions = [
     (re.compile(r' "'), " \"`"),
     (re.compile(r'"([ .,;:])'), "\"'\\1"),
     (re.compile(r'^"'), "\"`"),
-    (re.compile(r'"$'), "\"'")
+    (re.compile(r'"$'), "\"'"),
+    (re.compile("([^ ]) (–|-) "), "\\1~-- ")
 ]
 
 commands = {
@@ -67,7 +69,7 @@ def break_long_lines(source):
     result = []
     for paragraph in splitted:
         if paragraph != "":
-            result += textwrap.wrap(paragraph, 98)
+            result += textwrap.wrap(paragraph, 98, break_on_hyphens=False)
         else:
             # empty lines
             result.append("")
