@@ -14,7 +14,6 @@ import textwrap
 latex_substitutions = [
     (re.compile("„"), "\""),
     (re.compile("“"), "\""),
-    (re.compile("\\r\\n"), "\\n"),
     (re.compile(r'\\'), r'\\textbackslash'),
     (re.compile(r'([{}_#%&$])'), r'\\\1'),
     (re.compile(r'~'), r'\~{}'),
@@ -49,6 +48,7 @@ commands = {
 }
 default_cmd = {"name": "???", "command": "\\abstractOther"}
 DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
+RE_SINGLE_NEWLINE = re.compile("[^\\n]\\n", re.MULTILINE)
 
 def datetimeformat(value, format="%H:%M"):
     return value.strftime(format)
@@ -61,7 +61,22 @@ def escape_latex(source):
 
 
 def break_long_lines(source):
-    return textwrap.wrap(source, 100)
+    # split source by newlines to preserve them
+    splitted = source.replace("\r\n", "\n")
+    splitted = RE_SINGLE_NEWLINE.sub("\\n\\n", splitted).split("\n")
+    result = []
+    for paragraph in splitted:
+        if paragraph != "":
+            result += textwrap.wrap(paragraph, 98)
+        else:
+            # empty lines
+            result.append("")
+    # add two spaces at the beginning of each line
+    for i in range(0, len(result)):
+        if result[i] != "":
+            result[i] = "  {}".format(result[i])
+    result = "\n".join(result)
+    return result
 
 
 def talk2tex(template, item, last_timeslot):
@@ -91,10 +106,7 @@ for day in schedule["conference"]["days"]:
             for person in talk["persons"]:
                 speakers.append(person["public_name"])
             speakers = ", ".join(speakers)
-            abstract = html.unescape(talk["abstract"])
-            # remove colon from timezone
-#            if talk["date"][-3] == ":":
-#                talk["date"] = talk["date"][:-3] + talk["date"][-2:]
+            abstract = break_long_lines(html.unescape(talk["abstract"]))
             talks.append({
                 "date": datetime.datetime.strptime(talk["date"], DATE_FORMAT),
                 "title": talk["title"],
